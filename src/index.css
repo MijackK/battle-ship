@@ -1,3 +1,11 @@
 h1 {
   color: green;
 }
+
+.board {
+  display: grid;
+  width: 500px;
+  height: 500px;
+  grid-template: repeat(10, 1fr) / repeat(10, 1fr);
+  cursor: pointer;
+}

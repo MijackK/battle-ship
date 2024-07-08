@@ -26,7 +26,7 @@ test("place carriership horizontally at (0,0)", () => {
   const testBoard = board();
   const testShip = ship("carrier");
   testBoard.placeShip(testShip, { x: 0, y: 0 }, "horizontal");
-  expect(testBoard.getBoard()[0][1].ship).toBe(testShip);
+  expect(testBoard.getBoard()[1][0].ship).toBe(testShip);
 });
 
 test("place carriership vertically at (0,0)", () => {
@@ -49,10 +49,10 @@ test("check carrier occupies proper coordinates horizontally", () => {
 test("check submarine occupies proper coordinates vertically", () => {
   const testBoard = board();
   const testShip = ship("carrier");
-  testBoard.placeShip(testShip, { x: 5, y: 5 });
+  testBoard.placeShip(testShip, { x: 5, y: 5 }, "vertical");
   const occupied = [
     testBoard.getBoard()[5][5].ship,
-    testBoard.getBoard()[5][4].ship,
+    testBoard.getBoard()[5][6].ship,
   ];
   expect(occupied).toEqual([testShip, testShip]);
 });
@@ -108,11 +108,11 @@ test("check if the game  is over if all ships are sunk", () => {
   const testCarrier = ship("carrier");
   const testSubmarine = ship("submarine");
   testBoard.placeShip(testCarrier, { x: 0, y: 0 }, "horizontal");
-  for (let i = 0; i < testCarrier.getLength(); i++) {
+  for (let i = 0; i < testCarrier.getLength(); i += 1) {
     testCarrier.hit();
   }
-  testBoard.placeShip(testSubmarine, { x: 0, y: 9 }, "vertically");
-  for (let i = 0; i < testSubmarine.getLength(); i++) {
+  testBoard.placeShip(testSubmarine, { x: 0, y: 9 }, "vertical");
+  for (let i = 0; i < testSubmarine.getLength(); i += 1) {
     testCarrier.hit();
   }
 

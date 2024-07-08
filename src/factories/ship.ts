@@ -1,6 +1,6 @@
 export default function ship(
   type: "carrier" | "battleship" | "cruiser" | "submarine" | "destroyer"
-): Ship {
+): ShipInterface {
   const shipLength = {
     carrier: 5,
     battleship: 4,
@@ -19,7 +19,7 @@ export default function ship(
   return { hit, isSunk, getLength: () => shipLength[type] };
 }
 
-export interface Ship {
+export interface ShipInterface {
   hit: () => void;
   isSunk: () => boolean;
   getLength: () => number;

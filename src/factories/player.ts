@@ -1,6 +1,6 @@
-import { Ship } from "./ship";
+import { ShipInterface } from "./ship";
 
-export function player(name: string) {
+export function player(name: string): PlayerInterface {
   let wins = 0;
   const incrementWins = () => {
     wins += 1;
@@ -8,11 +8,11 @@ export function player(name: string) {
   const getWins = () => wins;
   return { incrementWins, getWins };
 }
-export function computerPlayer(name: string): ComputerPlayer {
+export function computerPlayer(name: string): ComputerInterface {
   let previousHit;
 
   const getRandomMove = (
-    board: { hit: boolean; ship: undefined | Ship }[][]
+    board: { hit: boolean; ship: undefined | ShipInterface }[][]
   ) => {
     let randomMove;
     while (randomMove !== undefined) {
@@ -24,19 +24,23 @@ export function computerPlayer(name: string): ComputerPlayer {
     }
     return randomMove;
   };
-  const makeMove = (board: { hit: boolean; ship: undefined | Ship }[][]) => {
+  const makeMove = (
+    board: { hit: boolean; ship: undefined | ShipInterface }[][]
+  ) => {
     return true;
   };
   return { getRandomMove, ...player(name) };
 }
 
-export interface Player {
+export interface PlayerInterface {
   incrementWins: () => void;
   getWins: () => number;
 }
 
-export interface ComputerPlayer extends Player {
-  getRandomMove: (board: { hit: boolean; ship: undefined | Ship }[][]) => {
+export interface ComputerInterface extends PlayerInterface {
+  getRandomMove: (
+    board: { hit: boolean; ship: undefined | ShipInterface }[][]
+  ) => {
     x: number;
     y: number;
   };

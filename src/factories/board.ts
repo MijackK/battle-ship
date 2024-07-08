@@ -1,12 +1,25 @@
-import { Ship } from "./ship";
-export default function board(): Board {
-  const generateBoard = () =>
-    Array.from(Array(10), () =>
-      Array(10).fill({ hit: false, ship: undefined })
-    );
-  let board: { hit: boolean; ship: undefined | Ship }[][] = generateBoard();
+import { ShipInterface } from "./ship";
+export default function board(): BoardInterface {
+  const size = 10;
+  const generateBoard = () => {
+    const boardArr = [];
+    for (let outer = 0; outer < size; outer += 1) {
+      const values = [];
+      for (let inner = 0; inner < size; inner += 1) {
+        const boardObject: { hit: boolean; ship: undefined | ShipInterface } = {
+          hit: false,
+          ship: undefined,
+        };
+        values[inner] = boardObject;
+      }
+      boardArr[outer] = values;
+    }
+    return boardArr;
+  };
 
-  let ships: Ship[] = [];
+  let board = generateBoard();
+
+  let ships: ShipInterface[] = [];
 
   const canPlace = (
     coordinates: { x: number; y: number },
@@ -24,8 +37,8 @@ export default function board(): Board {
         xPosition < board.length &&
         yPosition >= 0 &&
         yPosition < board.length;
-      const empty = !board[coordinates.x][coordinates.y].ship;
-      if (empty && inbound) {
+
+      if (inbound && !board[xPosition][yPosition].ship) {
         locations.push({ x: xPosition, y: yPosition });
       } else {
         return false;
@@ -40,7 +53,7 @@ export default function board(): Board {
       return false;
     }
     location.hit = true;
-    const ship: Ship = location.ship;
+    const ship: ShipInterface = location.ship;
     if (ship) {
       ship.hit();
     }
@@ -48,7 +61,7 @@ export default function board(): Board {
   };
 
   const placeShip = (
-    ship: Ship,
+    ship: ShipInterface,
     coordinates: { x: number; y: number },
     orientation: "horizontal" | "vertical"
   ) => {
@@ -60,7 +73,7 @@ export default function board(): Board {
       board[x][y].ship = ship;
     }
     ships.push(ship);
-    return true;
+    return locations;
   };
 
   const gameOver = () => ships.every((ship) => ship.isSunk());
@@ -78,14 +91,14 @@ export default function board(): Board {
   };
 }
 
-export interface Board {
+export interface BoardInterface {
   receiveAttack: (x: number, y: number) => boolean;
-  getBoard: () => { hit: boolean; ship: undefined | Ship }[][];
+  getBoard: () => { hit: boolean; ship: undefined | ShipInterface }[][];
   placeShip: (
-    ship: Ship,
+    ship: ShipInterface,
     coordinates: { x: number; y: number },
     orientation: "horizontal" | "vertical"
-  ) => boolean;
+  ) => boolean | { x: number; y: number }[];
   gameOver: () => boolean;
   resetBoard: () => void;
 }
